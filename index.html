@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>AMSO</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>AMSO — Sistem Absensi</title>
     <style>
-        html, body { margin: 0; height: 100%; }
-        iframe { 
-            width: 100%; 
-            height: 100%; 
-            border: none; 
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background: #F3F5F4; /* warna dasar aplikasi, cegah flash putih */
+        }
+        iframe {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
     </style>
 </head>
 <body>
     <!-- Ganti URL_DEPLOY_LO dengan link Apps Script lo yang udah di-deploy -->
-    <iframe src="https://script.google.com/macros/s/AKfycbzGn2S4EVgHdGLMy3e58LFXzGQpqEHglrYwMNIj8dVxtbC7ew53Z-rjP6Kh8vr9YRzW/exec"></iframe>
+    <iframe
+        src="https://script.google.com/macros/s/AKfycbzGn2S4EVgHdGLMy3e58LFXzGQpqEHglrYwMNIj8dVxtbC7ew53Z-rjP6Kh8vr9YRzW/exec"
+        title="Aplikasi Absensi"
+        allow="clipboard-write">
+    </iframe>
 </body>
 </html>
