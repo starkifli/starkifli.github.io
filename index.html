@@ -21,62 +21,103 @@
             border: none;
             display: block;
         }
-        .logo {
+
+        /* Splash screen: tampil saat index dibuka, hilang setelah iframe siap */
+        #splash {
             position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
+            inset: 0;
+            z-index: 999;
+            background: #F3F5F4;
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px 4px 6px;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        #splash.splash-hide {
+            opacity: 0;
             pointer-events: none;
-            user-select: none;
+        }
+        .splash-inner {
+            text-align: center;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .logo svg {
+        .splash-logo {
             display: block;
+            margin: 0 auto 14px;
         }
-        .logo .logo-text {
-            font-size: 12px;
+        .splash-text {
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             color: #1F5F3F;
         }
-        .logo .logo-sub {
-            font-size: 8px;
+        .splash-sub {
+            font-size: 11px;
             font-weight: 400;
-            letter-spacing: 1.5px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             color: #6B7A71;
-            display: block;
-            line-height: 1.2;
+            margin-top: 3px;
+        }
+        .splash-spinner {
+            width: 28px;
+            height: 28px;
+            margin: 20px auto 0;
+            border: 3px solid #D5E4DA;
+            border-top-color: #1F5F3F;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <!-- Ganti URL_DEPLOY_LO dengan link Apps Script lo yang udah di-deploy -->
-    <!-- Logo aplikasi, tampil di tengah atas saat index dibuka -->
-    <div class="logo" aria-label="Logo AMSO Sistem Absensi">
-        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img">
-            <circle cx="24" cy="24" r="22" fill="#1F5F3F"/>
-            <path d="M14 25 L21 32 L34 17" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M14 25 L21 32 L34 17" fill="none" stroke="#8FD6B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div>
-            <span class="logo-text">AMSO</span>
-            <span class="logo-sub">Sistem Absensi</span>
+    <!-- Splash screen dengan logo -->
+    <div id="splash">
+        <div class="splash-inner">
+            <svg class="splash-logo" width="64" height="64" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo AMSO">
+                <circle cx="24" cy="24" r="22" fill="#1F5F3F"/>
+                <path d="M14 25 L21 32 L34 17" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 25 L21 32 L34 17" fill="none" stroke="#8FD6B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="splash-text">AMSO</div>
+            <div class="splash-sub">Sistem Absensi</div>
+            <div class="splash-spinner"></div>
         </div>
     </div>
 
+    <!-- Ganti URL_DEPLOY_LO dengan link Apps Script lo yang udah di-deploy -->
     <iframe
+        id="app-frame"
         src="https://script.google.com/macros/s/AKfycbzGn2S4EVgHdGLMy3e58LFXzGQpqEHglrYwMNIj8dVxtbC7ew53Z-rjP6Kh8vr9YRzW/exec"
         title="Aplikasi Absensi"
         allow="clipboard-write">
     </iframe>
+
+    <script>
+        (function () {
+            var splash = document.getElementById('splash');
+            var frame = document.getElementById('app-frame');
+            var hidden = false;
+
+            function hideSplash() {
+                if (hidden) return;
+                hidden = true;
+                splash.classList.add('splash-hide');
+                // Hapus dari layar setelah transisi selesai
+                setTimeout(function () {
+                    splash.style.display = 'none';
+                }, 550);
+            }
+
+            // Sembunyikan saat iframe selesai dimuat
+            frame.addEventListener('load', hideSplash);
+
+            // Fallback: jangan biarkan splash keblok selamanya (mis. koneksi lambat/putus)
+            setTimeout(hideSplash, 10000);
+        })();
+    </script>
 </body>
 </html>
